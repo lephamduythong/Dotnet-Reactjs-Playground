@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "jciYbUYLHl46VrAk9/V4Ri6EDt3gwDNhd8GPfCgnmrHhsE+rPvYg9ml9VqmldGi008H6Hc2Ci8NPCa9bbrQ9Rw==",
+  "success": true,
+  "projectFilePath": "E:\\LEARNING\\Dotnet-React-Playground\\Reactivities\\Persistence\\Persistence.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.netcore.app.ref\\5.0.0\\microsoft.netcore.app.ref.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

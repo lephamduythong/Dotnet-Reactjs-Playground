@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "vCjx6C/NxAT6yeUneqz2q5agyM+AFojel0uH2IIjOO+8yV1pBmwE62Q54w81KEZlRzeEf6yHzbdRIVbjw5DebQ==",
+  "success": true,
+  "projectFilePath": "E:\\LEARNING\\Dotnet-React-Playground\\Reactivities\\Application\\Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.netcore.app.ref\\5.0.0\\microsoft.netcore.app.ref.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -12,7 +12,7 @@ function App() {
       setActivities(res.data);
     });
   }, []);
-
+  
   return (
     <>
       <Header as="h2" icon="users" content="Reactivities" />

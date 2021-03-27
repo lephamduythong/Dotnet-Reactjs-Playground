@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "semantic-ui-css/semantic.min.css";
 import App from "./app/layout/App";
-import { store, StoreContext } from "./app/stores/store";
+import { store, storeContext as StoreContext } from "./app/stores/store";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(

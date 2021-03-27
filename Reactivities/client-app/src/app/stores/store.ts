@@ -9,8 +9,8 @@ export const store: Store = {
     activityStore: new ActiviyStore()
 }
 
-export const StoreContext = createContext(store);
+export const storeContext = createContext(store);
 
 export function useStore() {
-    return useContext(StoreContext);
+    return useContext(storeContext);
 }

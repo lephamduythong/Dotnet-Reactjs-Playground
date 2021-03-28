@@ -1,18 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useParams } from "react-router";
 import { Button, Card, Image } from "semantic-ui-react";
-import LoadingComponet from "../../../app/layout/LoadingComponent";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
 
-interface Props {}
-
-export default function ActivityDetails(_: Props) {
+export default observer(function ActivityDetails() {
   const { activityStore } = useStore();
-  const { selectedActivity: activity } = activityStore;
-  console.log("xxx");
-  if (!activity) {
-    return <LoadingComponet />;
+  const { selectedActivity: activity, loadActivity, loadingInitial } = activityStore;
+  const { id } = useParams<{id: string}>();
+
+  useEffect(() => {
+    if (id) {
+      loadActivity(id);
+    }
+  }, [id, loadActivity]);
+
+  if (loadingInitial || !activity) {
+    return <LoadingComponent />;
   }
-  
+
   return (
     <Card fluid>
       <Image
@@ -30,17 +37,11 @@ export default function ActivityDetails(_: Props) {
       <Card.Content extra>
         <Button.Group widths="2">
           <Button
-            onClick={() => {
-              activityStore.openForm(activity.id);
-            }}
             basic
             color="blue"
             content="Edit"
           />
           <Button
-            onClick={() => {
-              activityStore.cancelSelectedActivity();
-            }}
             basic
             color="red"
             content="Cancel"
@@ -49,4 +50,4 @@ export default function ActivityDetails(_: Props) {
       </Card.Content>
     </Card>
   );
-}
+});

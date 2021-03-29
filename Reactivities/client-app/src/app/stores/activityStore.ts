@@ -47,12 +47,15 @@ export default class ActiviyStore {
         activity = await agent.Activities.details(id);
         this.setActivity(activity);
         this.selectedActivity = activity;
-        this.loadingInitial = false;
+        runInAction(() => {
+          this.loadingInitial = false;
+        });
       } catch (error) {
         console.log(error);
         this.loadingInitial = false;
       }
     }
+    return activity;
   };
 
   private setActivity = (activity: Activity) => {

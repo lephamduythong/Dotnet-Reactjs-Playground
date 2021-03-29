@@ -1,18 +1,22 @@
 import { observer } from "mobx-react-lite";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { useParams } from "react-router";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router";
 import { Button, Form, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
+import { v4 as uuid } from "uuid";
+import { runInAction } from "mobx";
 
 export default observer(function ActivityForm() {
+  const history = useHistory();
+
   const { activityStore } = useStore();
   const {
+    loading,
+    loadingInitial,
     createActivity,
     updateActivity,
-    loading,
     loadActivity,
-    loadingInitial,
   } = activityStore;
   const { id } = useParams<{ id: string }>();
 
@@ -29,23 +33,39 @@ export default observer(function ActivityForm() {
   useEffect(() => {
     if (id) {
       loadActivity(id).then((activity) => setActivity(activity!));
+    } else {
+      runInAction(() => {
+        activityStore.loadingInitial = false;
+      });
     }
-  }, [id, loadActivity]);
+  }, [id, loadActivity, activityStore, loadingInitial]);
 
   function handleSubmit() {
-    activity.id ? updateActivity(activity) : createActivity(activity);
+    if (activity.id.length === 0) {
+      let newActivity = {
+        ...activity,
+        id: uuid(),
+      };
+      console.log("1.1");
+      createActivity(newActivity).then(() => {
+        history.push(`/activities/${newActivity.id}`);
+      });
+    } else {
+      updateActivity(activity).then(() => {
+        history.push(`/activities/${activity.id}`);
+      });
+    }
   }
 
   function handleInputChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
     const { name, value } = event.target;
-    console.log("Changed ", name, " ", value);
     setActivity({ ...activity, [name]: value });
   }
 
   if (loadingInitial) {
-    return <LoadingComponent content="Loading activity..." />
+    return <LoadingComponent content="Loading activity..." />;
   }
 
   return (
@@ -89,13 +109,10 @@ export default observer(function ActivityForm() {
         />
         <Button
           loading={loading}
+          type="submit"
           floated="right"
           positive
-          type="submit"
           content="Submit"
-          onClick={() => {
-            handleSubmit();
-          }}
         />
         <Button floated="right" type="button" content="Cancel" />
       </Form>

@@ -3,9 +3,11 @@ import { observer } from "mobx-react-lite";
 import { Button, Card, Image } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { useStore } from "../../../app/stores/store";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 
 export default observer(function ActivityDetails() {
+  const history = useHistory();
+  
   const { activityStore } = useStore();
   const {
     selectedActivity: activity,
@@ -45,7 +47,7 @@ export default observer(function ActivityDetails() {
             color="blue"
             content="Edit"
           />
-          <Button basic color="red" content="Cancel" />
+          <Button onClick={() => history.goBack()} basic color="red" content="Cancel" />
         </Button.Group>
       </Card.Content>
     </Card>

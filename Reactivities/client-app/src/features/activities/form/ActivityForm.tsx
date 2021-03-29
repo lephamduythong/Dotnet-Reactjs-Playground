@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { Button, Form, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
@@ -46,7 +46,6 @@ export default observer(function ActivityForm() {
         ...activity,
         id: uuid(),
       };
-      console.log("1.1");
       createActivity(newActivity).then(() => {
         history.push(`/activities/${newActivity.id}`);
       });
@@ -114,7 +113,7 @@ export default observer(function ActivityForm() {
           positive
           content="Submit"
         />
-        <Button floated="right" type="button" content="Cancel" />
+        <Button onClick={() => history.goBack()} floated="right" type="button" content="Cancel" />
       </Form>
     </Segment>
   );

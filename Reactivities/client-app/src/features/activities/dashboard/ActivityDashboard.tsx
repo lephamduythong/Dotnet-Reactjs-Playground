@@ -7,11 +7,13 @@ import ActivityList from "./ActivityList";
 
 export default observer(function ActivityDashboard() {
   const { activityStore } = useStore();
-  const { loadingInitial } = activityStore;
+  const { loadingInitial, activityRegistry } = activityStore;
 
   useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]);
+    if (activityRegistry.size <= 1) {
+      activityStore.loadActivities();
+    }
+  }, [activityStore, activityRegistry.size]);
 
   if (loadingInitial) {
     return <LoadingComponent />;

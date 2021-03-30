@@ -8,15 +8,25 @@ export default class ActiviyStore {
   editMode = false;
   loading = false;
   loadingInitial = true;
-
+  
   constructor() {
     makeAutoObservable(this);
   }
 
-  get activitiesByDate() {
+  private get activitiesByDate() {
     return Array.from(this.activityRegistry.values()).sort(
       (a, b) => Date.parse(a.date) - Date.parse(b.date)
     );
+  }
+
+  get groupedActivities() {
+    return Object.entries(
+      this.activitiesByDate.reduce((activities, activity) => {
+        const date = activity.date;
+        activities[date] = activities[date] ? [...activities[date], activity] : [activity];
+        return activities;
+      }, { } as {[key: string]: Activity[]})
+    )
   }
 
   loadActivities = async () => {
@@ -69,45 +79,19 @@ export default class ActiviyStore {
     return this.activityRegistry.get(id);
   };
 
-  // selectActivty = async (id: string) => {
-  //   this.selectedActivity = this.activityRegistry.get(id);
-  // };
-
-  // cancelSelectedActivity = async () => {
-  //   this.selectedActivity = undefined;
-  // };
-
-  // openForm = async (id?: string) => {
-  //   id ? this.selectActivty(id) : this.cancelSelectedActivity();
-  //   this.editMode = true;
-  // };
-
-  // closeForm = async () => {
-  //   this.editMode = false;
-  // };
-
   createActivity = async (activity: Activity) => {
-    console.log("1.1.1");
     this.loading = true;
     try {
-      console.log("1.1.2");
       await agent.Activities.create(activity);
       runInAction(() => {
-        console.log("1.1.3");
         this.activityRegistry.set(activity.id, activity);
-        console.log("1.1.4");
         this.selectedActivity = activity;
-        console.log("1.1.5");
         this.editMode = false;
-        console.log("1.1.6");
         this.loading = false;
-        console.log("1.1.7");
       });
     } catch (error) {
-      console.log("1.1.4");
       console.log(error);
       runInAction(() => {
-        console.log("1.1.5");
         this.loading = false;
       });
     }

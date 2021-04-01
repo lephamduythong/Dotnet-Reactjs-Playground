@@ -20,7 +20,18 @@ axios.interceptors.response.use(
   (error: AxiosError) => {
     switch (error.response?.status) {
       case 400:
-        toast.error("Bad request");
+        const data = error.response.data;
+        if (data.errors) {
+          const modalStateErrors = [];
+          for (const key in data.errors) {
+            if (data.errors[key]) {
+              modalStateErrors.push(data.errors[key]);
+            }
+          }
+          throw modalStateErrors.flat();
+        } else {
+          toast.error(data);
+        }
         break;
       case 401:
         toast.error("Unauthorised");
@@ -32,9 +43,10 @@ axios.interceptors.response.use(
         toast.error("Server error");
         break;
       default:
-        toast.error("Undefined error")
+        toast.error("Undefined error");
         break;
     }
+    return Promise.reject(error);
   }
 );
 

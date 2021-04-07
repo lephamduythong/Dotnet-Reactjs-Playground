@@ -1,15 +1,18 @@
 import { Formik } from "formik";
+import { observer } from "mobx-react-lite";
 import React from "react";
 import { Button, Form } from "semantic-ui-react";
 import MyTextInput from "../../app/common/form/MyTextInput";
+import { useStore } from "../../app/stores/store";
 
-export default function LoginForm() {
+export default observer(function LoginForm() {
+  const { userStore } = useStore();
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
-      onSubmit={(values) => console.log(values)}
+      onSubmit={(values) => userStore.login(values)}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit, isSubmitting }) => (
         <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
           <MyTextInput name="email" placeholder="Email" />
           <MyTextInput name="password" placeholder="Password" type="password" />
@@ -18,4 +21,4 @@ export default function LoginForm() {
       )}
     </Formik>
   );
-}
+});

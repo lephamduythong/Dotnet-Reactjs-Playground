@@ -21,26 +21,24 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 
-// fake loading timeout for every http request
 axios.interceptors.response.use(
+  // fake loading timeout for every http request
   async (response) => {
     await sleep(1000);
+
     return response;
   },
   (error: AxiosError) => {
-    console.log(error.response);
     const config = error.response?.config;
     switch (error.response?.status) {
       case 400:
         const data = error.response.data;
-        if (typeof data === "string") {
-          toast.error(data);
-        }
         if (config?.method === "get" && data.errors.hasOwnProperty("id")) {
           history.push("/not-found");
         }
         if (data.errors) {
           const modalStateErrors = [];
+
           for (const key in data.errors) {
             if (data.errors[key]) {
               modalStateErrors.push(data.errors[key]);

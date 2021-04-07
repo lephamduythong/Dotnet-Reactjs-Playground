@@ -13,6 +13,14 @@ const sleep = (duration: number) => {
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
+axios.interceptors.request.use((config) => {
+  const token = store.commonStore.token;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // fake loading timeout for every http request
 axios.interceptors.response.use(
   async (response) => {

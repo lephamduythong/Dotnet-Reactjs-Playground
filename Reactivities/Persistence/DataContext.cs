@@ -21,12 +21,12 @@ namespace Persistence
 			builder.Entity<ActivityAttendee>(x => x.HasKey(aa => new { aa.AppUserId, aa.ActivityId }));
 
 			builder.Entity<ActivityAttendee>()
-				.HasOne(u => u.AppUser)
-				.WithMany(a => a.Activities)
+				.HasOne(aa => aa.AppUser)
+				.WithMany(u => u.Activities)
 				.HasForeignKey(aa => aa.AppUserId);
 
 			builder.Entity<ActivityAttendee>()
-				.HasOne(u => u.Activity)
+				.HasOne(aa => aa.Activity)
 				.WithMany(a => a.Attendees)
 				.HasForeignKey(aa => aa.ActivityId);
 		}

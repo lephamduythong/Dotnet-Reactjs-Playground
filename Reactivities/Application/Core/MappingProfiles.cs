@@ -1,3 +1,4 @@
+using Application.Activities;
 using AutoMapper;
 using Domain;
 
@@ -8,7 +9,9 @@ namespace Application.Core
         public MappingProfiles()
         {
             CreateMap<Activity, Activity>()
-                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null)); 
-        }
+                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+			CreateMap<Activity, ActivityDto>()
+				.ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));;
+		}
     }
 }

@@ -4,6 +4,7 @@ import { Button, Icon, Item, Segment } from "semantic-ui-react";
 import { Activity } from "../../../app/models/activity";
 import { useStore } from "../../../app/stores/store";
 import { format } from "date-fns";
+import ActivityListItemAttendee from "./ActivityListItemAttendee";
 
 interface Props {
   activity: Activity;
@@ -37,7 +38,9 @@ export default function ActivityListItem({ activity }: Props) {
           <Icon name="marker" /> {activity.venue}
         </span>
       </Segment>
-      <Segment secondary>Atendees go here</Segment>
+      <Segment secondary>
+        <ActivityListItemAttendee attendees={activity.attendees!} />
+      </Segment>
       <Segment clearing>
         <span>{activity.description}</span>
         <Button

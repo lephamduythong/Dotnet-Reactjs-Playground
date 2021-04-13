@@ -87,10 +87,11 @@ const Account = {
 const Activities = {
   list: () => requests.get<Activity[]>("/activities"),
   details: (id: string) => requests.get<Activity>(`/activities/${id}`),
-  create: (activity: Activity) => axios.post("/activities", activity),
+  create: (activity: Activity) => requests.post<void>("/activities", activity),
   update: (activity: Activity) =>
-    axios.put(`/activities/${activity.id}`, activity),
-  delete: (id: string) => axios.delete(`/activities/${id}`),
+    requests.put<void>(`/activities/${activity.id}`, activity),
+  delete: (id: string) => requests.del<void>(`/activities/${id}`),
+  attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {})
 };
 
 const agent = {

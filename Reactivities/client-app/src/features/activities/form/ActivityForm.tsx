@@ -12,7 +12,7 @@ import MyTextArea from "../../../app/common/form/MyTextArea";
 import MySelectInput from "../../../app/common/form/MySelectInput";
 import { categoryOptions } from "../../../app/common/options/categoryOptions";
 import MyDateInput from "../../../app/common/form/MyDateInput";
-import { Activity } from "../../../app/models/activity";
+import { ActivityFormValues } from "../../../app/models/activity";
 import { v4 as uuid } from "uuid";
 
 export default observer(function ActivityForm() {
@@ -20,7 +20,6 @@ export default observer(function ActivityForm() {
 
   const { activityStore } = useStore();
   const {
-    loading,
     loadingInitial,
     loadActivity,
     createActivity,
@@ -28,15 +27,9 @@ export default observer(function ActivityForm() {
   } = activityStore;
   const { id } = useParams<{ id: string }>();
 
-  const [activity, setActivity] = useState<Activity>({
-    id: "",
-    title: "",
-    category: "",
-    description: "",
-    date: null,
-    city: "",
-    venue: "",
-  });
+  const [activity, setActivity] = useState<ActivityFormValues>(
+    new ActivityFormValues()
+  );
 
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
@@ -49,7 +42,9 @@ export default observer(function ActivityForm() {
 
   useEffect(() => {
     if (id) {
-      loadActivity(id).then((activity) => setActivity(activity!));
+      loadActivity(id).then((activity) =>
+        setActivity(new ActivityFormValues(activity))
+      );
     } else {
       runInAction(() => {
         activityStore.loadingInitial = false;
@@ -57,8 +52,8 @@ export default observer(function ActivityForm() {
     }
   }, [id, loadActivity, activityStore, loadingInitial]);
 
-  function handleFormSubmit(activity: Activity) {
-    if (activity.id.length === 0) {
+  function handleFormSubmit(activity: ActivityFormValues) {
+    if (!activity.id) {
       let newActivity = {
         ...activity,
         id: uuid(),
@@ -84,9 +79,10 @@ export default observer(function ActivityForm() {
         validationSchema={validationSchema}
         enableReinitialize
         initialValues={activity}
-        onSubmit={(submittedActivityValues) =>
-          handleFormSubmit(submittedActivityValues)
-        }
+        onSubmit={(submittedActivityValues) => {
+          console.log(submittedActivityValues);
+          handleFormSubmit(submittedActivityValues);
+        }}
       >
         {({ handleSubmit, isValid, isSubmitting, dirty }) => (
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
@@ -108,7 +104,7 @@ export default observer(function ActivityForm() {
             <MyTextInput placeholder="City" name="city" />
             <MyTextInput placeholder="Venue" name="venue" />
             <Button
-              loading={loading}
+              loading={isSubmitting}
               disabled={isSubmitting || !dirty || !isValid}
               type="submit"
               floated="right"
